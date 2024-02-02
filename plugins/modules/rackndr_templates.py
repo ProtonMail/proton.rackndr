@@ -134,7 +134,7 @@ def run_module():
                       ),
         rackn_ep_validate=dict(type='bool',
                                required=False,
-                               fallback=(env_fallback, ['RS_ENDPOINT']),
+                               fallback=(env_fallback, ['RS_ENDPOINT_VALIDATE']),
                                default=True),
     )
 

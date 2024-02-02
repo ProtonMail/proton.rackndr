@@ -34,5 +34,10 @@ class ModuleDocFragment(object):
         description: RackN Digital Rebar API endpoint
         fallback: RS_ENDPOINT
         required: True
-
+    rackn_ep_validate:
+        description:
+          - RackN Digital Rebar API endpoint only accept valid TLS certificate
+        fallback: RS_ENDPOINT_VALIDATE
+        required: False
+        default: True
 '''
