@@ -211,7 +211,11 @@ def run_module():
     # When interested in Template object diff, replace the Contents key for
     # easy diff-ing of the rest of the Template object keys
     elif ((not module.params['diff_template_contents']) and 'diff' in rebar_result.keys()):
-        rebar_result['diff']['before']['Contents'] = 'REDACTED BY MODULE FOR EASY DIFF'
+        # Creating a new template results in Contents being non-existent
+        try:
+            rebar_result['diff']['before']['Contents'] = 'REDACTED BY MODULE FOR EASY DIFF'
+        except TypeError:
+            pass
         rebar_result['diff']['after']['Contents'] = 'REDACTED BY MODULE FOR EASY DIFF'
 
 
