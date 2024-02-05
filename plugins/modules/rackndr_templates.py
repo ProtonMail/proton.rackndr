@@ -197,7 +197,7 @@ def run_module():
     # Disclaimer: opinion ahead:
     # The most important piece of a template object is its contents; choose if
     # we should display the Template object diff or the Contents key diff
-    if 'diff' in rebar_result.keys() and module.params['diff_template_contents']:
+    if (module.params['diff_template_contents'] and 'diff' in rebar_result.keys()):
         try:
             # Creating a new object yields an empty before key
             rebar_result['diff']['before'] = rebar_result['diff']['before']['Contents']
@@ -208,6 +208,12 @@ def run_module():
             rebar_result['diff']['after'] = None
         else:
             rebar_result['diff']['after'] = rebar_result['diff']['after']['Contents']
+    # When interested in Template object diff, replace the Contents key for
+    # easy diff-ing of the rest of the Template object keys
+    elif ((not module.params['diff_template_contents']) and 'diff' in rebar_result.keys()):
+        rebar_result['diff']['before']['Contents'] = 'REDACTED BY MODULE FOR EASY DIFF'
+        rebar_result['diff']['after']['Contents'] = 'REDACTED BY MODULE FOR EASY DIFF'
+
 
     result = {**result, **rebar_result}
 
