@@ -49,7 +49,10 @@ options:
         type: bool
         default: False
     secure:
-        description: Whether this param contains sensitive data
+        description:
+          - Secure implies that any API interactions with this Param will deal
+            with SecureData values.
+          - `schema`s of type `string` values are masked when `secure` is True
         required: True
         type: bool
     meta:
@@ -169,6 +172,18 @@ def run_module():
         ],
         supports_check_mode=True
     )
+
+
+    # Implicitly mask `default` value when the parameter is marked as secure
+    # As a fallback, if the `default` key is not provided, mask all values
+    if module.params['secure']:
+        try:
+            if json.loads(module.params['schema'])['type'] == 'string':
+                module.no_log_values.add(json.loads(module.params['schema'])['default'])
+        except KeyError:
+            for i in json.loads(module.params['schema']).values():
+                module.no_log_values.add(i)
+
 
     data = pyrackndr.CONSTANTS['params'].copy()
     data['Description'] = module.params['description']
