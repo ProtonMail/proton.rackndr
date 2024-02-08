@@ -24,27 +24,33 @@ author:
     - Sorin Paduraru
 options:
     name:
-        description: Param name.
+        description:
+          - Name is the name of the param. Params must be uniquely named.
         required: True
         type: str
     state:
-        description: State of the param
+        description: State of the param.
         required: False
         type: str
         default: present
         choices: present, absent
     description:
-        description: Description associated with parameter
+        description:
+          - A one-line description of the parameter.
         required: False
         type: str
         default: ''
     documentation:
-        description: Documentation associated with parameter
+        description:
+          - Details what the parameter does, what values it can take, what it
+            is used for, etc.
         required: False
         type: str
         default: ''
     readonly:
-        description: Whether this param should be editable or not
+        description:
+          - Tracks if the store for this object is read-only. This flag is
+            informational, and cannot be changed via the API.
         required: False
         type: bool
         default: False
@@ -52,7 +58,7 @@ options:
         description:
           - Secure implies that any API interactions with this Param will deal
             with SecureData values.
-          - `schema`s of type `string` values are masked when `secure` is True
+          - schema's of type 'string' values are masked when 'secure' is True
         required: True
         type: bool
     meta:
