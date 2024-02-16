@@ -112,6 +112,12 @@ def run_module():
         description=dict(type='str', required=False, default=''),
         readonly=dict(type='bool', required=False, default=True),
         diff_template_contents=dict(type='bool', required=False, default=True),
+        ignore_remote_keys=dict(type='list', required=False, default=[
+            'CreatedAt',
+            'CreatedBy',
+            'LastModifiedAt',
+            'LastModifiedBy',
+        ]),
         rackn_role=dict(type='str',
                         required=False,
                         default='superuser'),
@@ -187,6 +193,7 @@ def run_module():
     )
     rebar_object.dryrun = module.check_mode
     rebar_object.tls_verify = module.params['rackn_ep_validate']
+    rebar_object.ignore_keys['remote'] = module.params['ignore_remote_keys']
 
     if module.params['state'] == 'present':
         rebar_result = rebar_object.create_or_update(module.params['name'], data)

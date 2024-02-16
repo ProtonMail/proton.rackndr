@@ -40,4 +40,13 @@ class ModuleDocFragment(object):
         fallback: RS_ENDPOINT_VALIDATE
         required: False
         default: True
+    ignore_remote_keys:
+        description:
+          - Ignore changes to these (remote) keys when updating the object
+        type: list
+        default:
+          - CreatedAt
+          - CreatedBy
+          - LastModifiedAt
+          - LastModifiedBy
 '''
