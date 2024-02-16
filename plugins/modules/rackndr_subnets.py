@@ -147,6 +147,12 @@ def run_module():
         dns_server=dict(type='str', required=True),
         network=dict(type='str', required=True),
         domain_name=dict(type='str', required=True),
+        ignore_remote_keys=dict(type='list', required=False, default=[
+            'CreatedAt',
+            'CreatedBy',
+            'LastModifiedAt',
+            'LastModifiedBy',
+        ]),
         rackn_role=dict(type='str',
                         required=False,
                         default='superuser'),
@@ -236,6 +242,7 @@ def run_module():
     )
     rebar_object.dryrun = module.check_mode
     rebar_object.tls_verify = module.params['rackn_ep_validate']
+    rebar_object.ignore_keys['remote'] = module.params['ignore_remote_keys']
 
     if module.params['state'] == 'present':
         rebar_result = rebar_object.create_or_update(module.params['name'], data)
