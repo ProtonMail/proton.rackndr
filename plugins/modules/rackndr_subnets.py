@@ -21,7 +21,7 @@ attributes:
   diff_mode:
     support: Full
 author:
-    - Sorin Paduraru
+    - Sorin Paduraru (spaduraru@proton.ch)
 options:
     name:
         description: Name of the subnet. Subnet names must be unique
