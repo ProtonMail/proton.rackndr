@@ -5,6 +5,24 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
+import ipaddress
+import traceback
+
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.parameters import (
+    env_fallback
+)
+from ansible.module_utils.basic import missing_required_lib
+
+try:
+    import pyrackndr
+except ImportError:
+    HAS_PYRACKNDR = False
+    PYRACKNDR_IMPORT_ERROR = traceback.format_exc()
+else:
+    HAS_PYRACKNDR = True
+    PYRACKNDR_IMPORT_ERROR = None
+
 DOCUMENTATION = r'''
 ---
 module: rackndr_subnets
@@ -118,15 +136,6 @@ http_code:
     sample: 200
 '''
 
-import ipaddress
-
-import pyrackndr
-
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.common.parameters import (
-    env_fallback
-)
-
 
 def run_module():
     # define available arguments/parameters a user can pass to the module
@@ -203,6 +212,10 @@ def run_module():
         supports_check_mode=True
     )
 
+    if not HAS_PYRACKNDR:
+        module.fail_json(
+            msg=missing_required_lib('pyrackndr'),
+            exception=PYRACKNDR_IMPORT_ERROR)
 
     data = pyrackndr.CONSTANTS['subnets'].copy()
     data['ActiveEnd'] = module.params['active_end']
@@ -252,7 +265,7 @@ def run_module():
     result = {**result, **rebar_result}
 
     if result['http_code'] not in [200, 201]:
-      module.fail_json(msg='Uh-oh', **result)
+        module.fail_json(msg='Uh-oh', **result)
 
     module.exit_json(**result)
 
