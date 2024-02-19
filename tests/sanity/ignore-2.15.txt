@@ -1,0 +1,4 @@
+plugins/modules/rackndr_subnets.py validate-modules:missing-gplv3-license # ignore license check
+plugins/modules/rackndr_templates.py validate-modules:missing-gplv3-license # ignore license check
+plugins/modules/rackndr_tasks.py validate-modules:missing-gplv3-license # ignore license check
+plugins/modules/rackndr_params.py validate-modules:missing-gplv3-license # ignore license check
