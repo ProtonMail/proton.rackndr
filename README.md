@@ -1,5 +1,17 @@
 # Ansible Collection - proton.rackndr
 
+Add the `pyprotonrebar` Python package to `requirements.txt` and install on the
+Ansible controller:
+
+```
+# requirements.txt
+pyrackndr @ git+https://<repo>/pyprotonrebar.git@master
+```
+
+```
+pip install -r requirements.txt
+```
+
 Define a `requirements.yml` file pointing to the collection, as
 explained in the
 [Ansible collection guide](https://docs.ansible.com/ansible/latest/collections_guide/collections_installing.html#install-multiple-collections-with-a-requirements-file):
