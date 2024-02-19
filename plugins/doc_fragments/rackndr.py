@@ -6,6 +6,12 @@ class ModuleDocFragment(object):
     # RackN Digital Rebar common documentation
     DOCUMENTATION = r'''
   options:
+    state:
+        description: State of the resource.
+        required: False
+        type: str
+        default: "present"
+        choices: ["present", "absent"]
     rackn_role:
         description: Role associated to the token requested for performing actions
         required: False

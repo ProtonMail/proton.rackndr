@@ -45,12 +45,6 @@ options:
         description: Name of the subnet. Subnet names must be unique
         required: true
         type: str
-    state:
-        description: State of the subnet
-        required: False
-        type: str
-        default: present
-        choices: present, absent
     description:
         description:
           - A description of this Subnet.  This should tell what it is for, any

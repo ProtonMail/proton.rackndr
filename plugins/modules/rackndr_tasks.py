@@ -46,11 +46,6 @@ options:
         description: Task name
         required: True
         type: str
-    state:
-        description: State of the task
-        type: str
-        default: 'present'
-        choices: present, absent
     description:
         description: Description is a one-line description of this Task
         type: str

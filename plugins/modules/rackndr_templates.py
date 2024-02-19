@@ -45,12 +45,6 @@ options:
         description: Template name
         required: True
         type: str
-    state:
-        description: State of the template
-        required: False
-        type: str
-        default: 'present'
-        choices: present, absent
     description:
         description: A description of this template
         required: False

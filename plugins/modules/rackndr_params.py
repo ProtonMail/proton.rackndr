@@ -46,12 +46,6 @@ options:
           - Name is the name of the param. Params must be uniquely named.
         required: True
         type: str
-    state:
-        description: State of the param.
-        required: False
-        type: str
-        default: present
-        choices: present, absent
     description:
         description:
           - A one-line description of the parameter.
