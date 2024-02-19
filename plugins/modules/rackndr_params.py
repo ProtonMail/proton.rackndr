@@ -5,6 +5,24 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
+import json
+import traceback
+
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.parameters import (
+    env_fallback
+)
+from ansible.module_utils.basic import missing_required_lib
+
+try:
+    import pyrackndr
+except ImportError:
+    HAS_PYRACKNDR = False
+    PYRACKNDR_IMPORT_ERROR = traceback.format_exc()
+else:
+    HAS_PYRACKNDR = True
+    PYRACKNDR_IMPORT_ERROR = None
+
 DOCUMENTATION = r'''
 ---
 module: rackndr_params
@@ -105,15 +123,6 @@ http_code:
     sample: 200
 '''
 
-import json
-
-import pyrackndr
-
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.common.parameters import (
-    env_fallback
-)
-
 
 def run_module():
     # define available arguments/parameters a user can pass to the module
@@ -185,6 +194,10 @@ def run_module():
         supports_check_mode=True
     )
 
+    if not HAS_PYRACKNDR:
+        module.fail_json(
+            msg=missing_required_lib('pyrackndr'),
+            exception=PYRACKNDR_IMPORT_ERROR)
 
     # Implicitly mask `default` value when the parameter is marked as secure
     # As a fallback, if the `default` key is not provided, mask all values
@@ -195,7 +208,6 @@ def run_module():
         except KeyError:
             for i in json.loads(module.params['schema']).values():
                 module.no_log_values.add(i)
-
 
     data = pyrackndr.CONSTANTS['params'].copy()
     data['Description'] = module.params['description']
@@ -235,7 +247,7 @@ def run_module():
     result = {**result, **rebar_result}
 
     if result['http_code'] not in [200, 201]:
-      module.fail_json(msg='Uh-oh', **result)
+        module.fail_json(msg='Uh-oh', **result)
 
     module.exit_json(**result)
 
