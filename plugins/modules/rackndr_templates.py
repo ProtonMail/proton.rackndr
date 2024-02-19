@@ -110,6 +110,7 @@ http_code:
     sample: 200
 '''
 
+
 def run_module():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
@@ -215,7 +216,6 @@ def run_module():
     else:
         rebar_result = rebar_object.delete(module.params['name'])
 
-
     # Disclaimer: opinion ahead:
     # The most important piece of a template object is its contents; choose if
     # we should display the Template object diff or the Contents key diff
@@ -225,7 +225,7 @@ def run_module():
             rebar_result['diff']['before'] = rebar_result['diff']['before']['Contents']
         except TypeError:
             rebar_result['diff']['before'] = None
-            
+
         if module.params['state'] == 'absent':
             rebar_result['diff']['after'] = None
         else:
@@ -240,11 +240,10 @@ def run_module():
             pass
         rebar_result['diff']['after']['Contents'] = 'REDACTED BY MODULE FOR EASY DIFF'
 
-
     result = {**result, **rebar_result}
 
     if result['http_code'] not in [200, 201]:
-      module.fail_json(msg='Uh-oh', **result)
+        module.fail_json(msg='Uh-oh', **result)
 
     module.exit_json(**result)
 
