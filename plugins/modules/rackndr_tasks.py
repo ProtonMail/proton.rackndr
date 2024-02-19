@@ -6,24 +6,6 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
-import traceback
-
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.common.parameters import (
-    env_fallback
-)
-from ansible.module_utils.basic import missing_required_lib
-
-try:
-    import pyrackndr
-except ImportError:
-    HAS_PYRACKNDR = False
-    PYRACKNDR_IMPORT_ERROR = traceback.format_exc()
-else:
-    HAS_PYRACKNDR = True
-    PYRACKNDR_IMPORT_ERROR = None
-
-
 DOCUMENTATION = r'''
 ---
 module: rackndr_tasks
@@ -34,13 +16,8 @@ requirements:
 extends_documentation_fragment:
   - proton.rackndr.rackndr
 version_added: "0.0.2"
-attributes:
-  check_mode:
-    support: Full
-  diff_mode:
-    support: Full
 author:
-    - Sorin Paduraru (spaduraru@proton.ch)
+    - Sorin Paduraru (!UNKNOWN) <spaduraru@proton.ch>
 options:
     name:
         description: Task name
@@ -61,7 +38,7 @@ options:
           - Tracks if the store for this object is read-only.
           - This flag is informational, and cannot be changed via the API
         type: bool
-        default: False
+        default: True
     templates:
         description:
           - Templates lists the templates that need to be rendered for the Task
@@ -69,6 +46,7 @@ options:
           - It is required item keys use the case expected by the API;
             otherwise module cannot achieve idempotency
         type: list
+        elements: dict
         required: True
     ignore_remote_keys:
         description:
@@ -84,6 +62,7 @@ options:
           - Ignore changes to these keys part of the local object when updating
             the object
         type: list
+        elements: str
         default:
           - ExtraRoles
           - OutputParams
@@ -133,6 +112,22 @@ http_code:
     sample: 200
 '''
 
+import traceback
+
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.parameters import (
+    env_fallback
+)
+from ansible.module_utils.basic import missing_required_lib
+
+try:
+    import pyrackndr
+except ImportError:
+    HAS_PYRACKNDR = False
+    PYRACKNDR_IMPORT_ERROR = traceback.format_exc()
+else:
+    HAS_PYRACKNDR = True
+    PYRACKNDR_IMPORT_ERROR = None
 
 # Fall-back values for the keys expected by the API when the user doesn't
 # define them
@@ -152,22 +147,32 @@ def run_module():
                    default='present',
                    choices=['present', 'absent']),
         name=dict(type='str', required=True),
-        templates=dict(type='list', required=True),
+        templates=dict(type='list', elements='dict', required=True),
         description=dict(type='str', required=False, default=''),
         documentation=dict(type='str', required=False, default=''),
         readonly=dict(type='bool', required=False, default=True),
-        ignore_remote_keys=dict(type='list', required=False, default=[
-            'CreatedAt',
-            'CreatedBy',
-            'LastModifiedAt',
-            'LastModifiedBy',
-        ]),
-        ignore_local_keys=dict(type='list', required=False, default=[
-            'ExtraRoles',
-            'OutputParams',
-            'ExtraClaims',
-            'Meta'
-        ]),
+        ignore_remote_keys=dict(
+            type='list',
+            required=False,
+            no_log=False,
+            elements='str',
+            default=[
+                'CreatedAt',
+                'CreatedBy',
+                'LastModifiedAt',
+                'LastModifiedBy',
+            ]),
+        ignore_local_keys=dict(
+            type='list',
+            required=False,
+            no_log=False,
+            elements='str',
+            default=[
+                'ExtraRoles',
+                'OutputParams',
+                'ExtraClaims',
+                'Meta'
+            ]),
         rackn_role=dict(type='str',
                         required=False,
                         default='superuser'),

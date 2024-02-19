@@ -2,26 +2,9 @@
 
 # Copyright: (c) 2024, Proton AG
 # Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
-
-import json
-import traceback
-
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.common.parameters import (
-    env_fallback
-)
-from ansible.module_utils.basic import missing_required_lib
-
-try:
-    import pyrackndr
-except ImportError:
-    HAS_PYRACKNDR = False
-    PYRACKNDR_IMPORT_ERROR = traceback.format_exc()
-else:
-    HAS_PYRACKNDR = True
-    PYRACKNDR_IMPORT_ERROR = None
 
 DOCUMENTATION = r'''
 ---
@@ -33,13 +16,8 @@ requirements:
 extends_documentation_fragment:
   - proton.rackndr.rackndr
 version_added: "0.0.1"
-attributes:
-  check_mode:
-    support: Full
-  diff_mode:
-    support: Full
 author:
-    - Sorin Paduraru (spaduraru@proton.ch)
+    - Sorin Paduraru (!UNKNOWN) <spaduraru@proton.ch>
 options:
     name:
         description:
@@ -117,6 +95,24 @@ http_code:
     sample: 200
 '''
 
+import json
+import traceback
+
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.parameters import (
+    env_fallback
+)
+from ansible.module_utils.basic import missing_required_lib
+
+try:
+    import pyrackndr
+except ImportError:
+    HAS_PYRACKNDR = False
+    PYRACKNDR_IMPORT_ERROR = traceback.format_exc()
+else:
+    HAS_PYRACKNDR = True
+    PYRACKNDR_IMPORT_ERROR = None
+
 
 def run_module():
     # define available arguments/parameters a user can pass to the module
@@ -132,12 +128,17 @@ def run_module():
         secure=dict(type='bool', required=True),
         schema=dict(type='json', required=True),
         meta=dict(type='json', required=False, default={}),
-        ignore_remote_keys=dict(type='list', required=False, default=[
-            'CreatedAt',
-            'CreatedBy',
-            'LastModifiedAt',
-            'LastModifiedBy',
-        ]),
+        ignore_remote_keys=dict(
+            type='list',
+            required=False,
+            no_log=False,
+            elements='str',
+            default=[
+                'CreatedAt',
+                'CreatedBy',
+                'LastModifiedAt',
+                'LastModifiedBy',
+            ]),
         rackn_role=dict(type='str',
                         required=False,
                         default='superuser'),
