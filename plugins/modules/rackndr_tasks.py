@@ -269,16 +269,18 @@ def run_module():
     result = {**result, **rebar_result}
 
     if result['http_code'] not in [200, 201]:
-      module.fail_json(msg='Uh-oh', **result)
+        module.fail_json(msg='Uh-oh', **result)
 
     module.exit_json(**result)
+
 
 def enrich_template(lobject):
     '''Add key/value pairs to object if key isn't present already.
     '''
     for k, v in TEMPLATE_DEFAULTS.items():
         if k not in lobject:
-            lobject.update({ k: v })
+            lobject.update({k: v})
+
 
 def main():
     run_module()
