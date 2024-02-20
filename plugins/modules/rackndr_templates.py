@@ -97,7 +97,7 @@ from ansible.module_utils.common.parameters import (
 from ansible.module_utils.basic import missing_required_lib
 
 try:
-    import pyrackndr
+    import pyrackndr.pyrackndr
 except ImportError:
     HAS_PYRACKNDR = False
     PYRACKNDR_IMPORT_ERROR = traceback.format_exc()
