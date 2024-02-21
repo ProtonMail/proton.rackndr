@@ -132,6 +132,7 @@ else:
 # Fall-back values for the keys expected by the API when the user doesn't
 # define them
 TEMPLATE_DEFAULTS = {
+    'Contents': '',
     'Path': '',
     'ID': '',
     'Link': '',
