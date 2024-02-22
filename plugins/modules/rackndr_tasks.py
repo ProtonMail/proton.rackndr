@@ -67,7 +67,13 @@ options:
           - ExtraRoles
           - OutputParams
           - ExtraClaims
-          - Meta
+    meta:
+        description:
+          - Metadata associated to the task.  JSON data passed as stripped,
+            folded Multi-line YAML string
+        required: False
+        type: json
+        default: {}
 '''
 
 EXAMPLES = r'''
@@ -112,6 +118,7 @@ http_code:
     sample: 200
 '''
 
+import json
 import traceback
 
 from ansible.module_utils.basic import AnsibleModule
@@ -152,6 +159,7 @@ def run_module():
         description=dict(type='str', required=False, default=''),
         documentation=dict(type='str', required=False, default=''),
         readonly=dict(type='bool', required=False, default=True),
+        meta=dict(type='json', required=False, default={}),
         ignore_remote_keys=dict(
             type='list',
             required=False,
@@ -172,7 +180,6 @@ def run_module():
                 'ExtraRoles',
                 'OutputParams',
                 'ExtraClaims',
-                'Meta'
             ]),
         rackn_role=dict(type='str',
                         required=False,
@@ -235,6 +242,7 @@ def run_module():
     data['Documentation'] = module.params['documentation']
     data['Name'] = module.params['name']
     data['ReadOnly'] = module.params['readonly']
+    data['Meta'] = json.loads(module.params['meta'])
 
     # Set default values for Template keys missing
     for template in data['Templates']:
