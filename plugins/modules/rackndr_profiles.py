@@ -45,7 +45,7 @@ options:
             informational, and cannot be changed via the API.
         required: False
         type: bool
-        default: False
+        default: True
     meta:
         description:
           - Metadata associated to the profile.  JSON data passed as stripped,
