@@ -5,7 +5,7 @@ Ansible controller:
 
 ```
 # requirements.txt
-pyrackndr @ git+https://<repo>/pyprotonrebar.git@master
+pyprotonrebar @ git+https://<repo>/pyprotonrebar.git@master
 ```
 
 ```

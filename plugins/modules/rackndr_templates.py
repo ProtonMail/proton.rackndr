@@ -12,7 +12,7 @@ module: rackndr_templates
 short_description: RackN Digital Rebar Templates module
 description: RackN Digital Rebar module for managing Templates
 requirements:
-  - pyrackndr
+  - pyprotonrebar
 extends_documentation_fragment:
   - proton.rackndr.rackndr
 version_added: "0.0.1"
@@ -97,7 +97,7 @@ from ansible.module_utils.common.parameters import (
 from ansible.module_utils.basic import missing_required_lib
 
 try:
-    import pyrackndr.pyrackndr
+    import pyprotonrebar.pyrackndr
 except ImportError:
     HAS_PYRACKNDR = False
     PYRACKNDR_IMPORT_ERROR = traceback.format_exc()
@@ -181,10 +181,10 @@ def run_module():
 
     if not HAS_PYRACKNDR:
         module.fail_json(
-            msg=missing_required_lib('pyrackndr'),
+            msg=missing_required_lib('pyprotonrebar'),
             exception=PYRACKNDR_IMPORT_ERROR)
 
-    data = pyrackndr.CONSTANTS['templates'].copy()
+    data = pyprotonrebar.CONSTANTS['templates'].copy()
     data['Contents'] = module.params['contents']
     data['Description'] = module.params['description']
     data['ID'] = module.params['name']
@@ -195,14 +195,14 @@ def run_module():
     else:
         creds = f"{module.params['rackn_user']}:{module.params['rackn_pass']}"
 
-    TOKEN = pyrackndr.pyrackndr.fetch_token_requests(
+    TOKEN = pyprotonrebar.pyrackndr.fetch_token_requests(
         module.params['rackn_role'],
         creds,
         module.params['rackn_ep'],
         ssl=module.params['rackn_ep_validate'])
     AUTH = TOKEN['header']
 
-    rebar_object = pyrackndr.pyrackndr.RackNDr(
+    rebar_object = pyprotonrebar.pyrackndr.RackNDr(
         module.params['rackn_ep'],
         AUTH,
         'templates'
