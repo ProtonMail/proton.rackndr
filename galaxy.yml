@@ -43,7 +43,7 @@ tags: []
 dependencies: {}
 
 # The URL of the originating SCM repository
-repository: https://gitlab.protontech.ch/infra/private/ansible-group/collections/proton.rackndr.git
+repository: https://github.com/ProtonMail/proton.rackndr
 
 # The URL to any online docs
 documentation:
